@@ -1,0 +1,63 @@
+<% const isEdit = !!(record && record._id); %>
+<%- include('../partials/head', { backUrl: `/diffusers/${diffuser._id}` }) %>
+
+<div class="panel mb-2">
+  <div class="font-semibold text-base"><%= diffuser.position %></div>
+  <div class="text-xs text-flow-muted mt-1"><%= diffuser.oilType || '未設定精油' %> · <%= diffuser.parts || '未設定機件' %></div>
+</div>
+
+<div class="panel">
+  <% if (error) { %>
+    <div class="mb-4 px-3 py-2 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm"><%= error %></div>
+  <% } %>
+  <form action="<%= isEdit ? `/records/${record._id}?_method=PUT` : '/records' %>" method="POST" class="space-y-4">
+    <input type="hidden" name="diffuser" value="<%= diffuser._id %>" />
+    <input type="hidden" name="location" value="<%= diffuser.location._id %>" />
+
+    <div>
+      <label class="form-label" for="performedAt">記錄日期</label>
+      <input class="form-input" type="date" id="performedAt" name="performedAt" value="<%= isEdit ? formatDateInput(record.performedAt) : formatDateInput(new Date()) %>" required />
+    </div>
+
+    <div class="flex items-center gap-3">
+      <input class="form-checkbox" type="checkbox" id="checked" name="checked" <%= !isEdit || record.checked ? 'checked' : '' %> />
+      <label for="checked" class="text-sm">已完成檢查</label>
+    </div>
+
+    <div>
+      <label class="form-label" for="actions">檢查及動作</label>
+      <textarea class="form-textarea" id="actions" name="actions" placeholder="記錄本次檢查內容及執行的動作"><%= isEdit ? record.actions : '' %></textarea>
+    </div>
+
+    <div class="grid grid-cols-2 gap-3">
+      <label class="flex items-center gap-3 p-3 border border-flow-line rounded-card cursor-pointer hover:bg-flow-hover has-[:checked]:border-emerald-300 has-[:checked]:bg-emerald-50">
+        <input class="form-checkbox" type="checkbox" id="oilChanged" name="oilChanged" <%= isEdit && record.oilChanged ? 'checked' : '' %> />
+        <div>
+          <div class="text-sm font-medium">已換精油</div>
+          <div class="text-xs text-flow-muted">下次：1 個月後</div>
+        </div>
+      </label>
+      <label class="flex items-center gap-3 p-3 border border-flow-line rounded-card cursor-pointer hover:bg-flow-hover has-[:checked]:border-flow-accent/30 has-[:checked]:bg-flow-hover">
+        <input class="form-checkbox" type="checkbox" id="batteryChanged" name="batteryChanged" <%= isEdit && record.batteryChanged ? 'checked' : '' %> />
+        <div>
+          <div class="text-sm font-medium">已換電池</div>
+          <div class="text-xs text-flow-muted">下次：2 個月後</div>
+        </div>
+      </label>
+    </div>
+
+    <div>
+      <label class="form-label" for="notes">備註</label>
+      <textarea class="form-textarea" id="notes" name="notes" placeholder="記錄問題或特別事項"><%= isEdit ? record.notes : '' %></textarea>
+    </div>
+
+    <div>
+      <label class="form-label" for="performedBy">記錄人</label>
+      <input class="form-input" type="text" id="performedBy" name="performedBy" value="<%= isEdit ? record.performedBy : '' %>" placeholder="選填" />
+    </div>
+
+    <button type="submit" class="btn-primary w-full"><%= isEdit ? '儲存變更' : '提交工作記錄' %></button>
+  </form>
+</div>
+
+<%- include('../partials/foot') %>

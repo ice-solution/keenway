@@ -1,0 +1,79 @@
+<% const oilStatus = dueStatus(diffuser.nextOilChange); %>
+<% const batteryStatus = dueStatus(diffuser.nextBatteryChange); %>
+<%- include('../partials/head', { backUrl: `/locations/${diffuser.location._id}` }) %>
+
+<% if (recorded) { %>
+<div class="px-3 py-2.5 rounded-card border border-emerald-200 bg-emerald-50 text-emerald-800 text-sm">
+  工作記錄已成功儲存
+</div>
+<% } %>
+
+<div class="panel space-y-3">
+  <div class="font-semibold text-base"><%= diffuser.position %></div>
+  <div class="grid grid-cols-2 gap-3 text-sm">
+    <div>
+      <div class="text-flow-muted text-xs mb-0.5">使用精油</div>
+      <div><%= diffuser.oilType || '—' %></div>
+    </div>
+    <div>
+      <div class="text-flow-muted text-xs mb-0.5">使用機件</div>
+      <div><%= diffuser.parts || '—' %></div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2 gap-2 pt-1">
+    <div class="stat-card !p-2.5">
+      <div class="stat-label">下次換油</div>
+      <div class="text-sm font-medium mt-1 <%= oilStatus === 'overdue' || oilStatus === 'urgent' ? 'text-red-600' : oilStatus === 'soon' ? 'text-amber-600' : '' %>"><%= formatDate(diffuser.nextOilChange) %></div>
+      <% if (oilStatus === 'overdue') { %><span class="badge-danger mt-1">已逾期</span><% } %>
+      <% if (oilStatus === 'urgent') { %><span class="badge-danger mt-1">7 日內</span><% } %>
+      <% if (oilStatus === 'soon') { %><span class="badge-warn mt-1">14 日內</span><% } %>
+    </div>
+    <div class="stat-card !p-2.5">
+      <div class="stat-label">下次換電</div>
+      <div class="text-sm font-medium mt-1 <%= batteryStatus === 'overdue' || batteryStatus === 'urgent' ? 'text-red-600' : batteryStatus === 'soon' ? 'text-amber-600' : '' %>"><%= formatDate(diffuser.nextBatteryChange) %></div>
+      <% if (batteryStatus === 'overdue') { %><span class="badge-danger mt-1">已逾期</span><% } %>
+      <% if (batteryStatus === 'urgent') { %><span class="badge-danger mt-1">7 日內</span><% } %>
+      <% if (batteryStatus === 'soon') { %><span class="badge-warn mt-1">14 日內</span><% } %>
+    </div>
+  </div>
+
+  <div class="flex gap-2">
+    <a href="/records/new?diffuser=<%= diffuser._id %>" class="btn-primary flex-1 text-center">+ 新增工作記錄</a>
+    <a href="/diffusers/<%= diffuser._id %>/edit" class="btn-secondary">編輯</a>
+  </div>
+</div>
+
+<div>
+  <h2 class="text-sm font-medium text-flow-muted mb-2">過往工作記錄（<%= records.length %>）</h2>
+  <% if (records.length === 0) { %>
+    <div class="panel text-center py-8 text-flow-muted text-sm">尚無工作記錄</div>
+  <% } else { %>
+    <div class="space-y-2">
+      <% records.forEach(function(r) { %>
+        <a href="/records/<%= r._id %>/edit" class="panel !p-3 block hover:bg-flow-hover transition-colors no-underline text-inherit">
+          <div class="flex items-start justify-between gap-2">
+            <div class="text-sm font-medium"><%= formatDate(r.performedAt) %></div>
+            <div class="flex gap-1 shrink-0 items-center">
+              <% if (r.checked) { %><span class="badge-success">已檢查</span><% } %>
+              <% if (r.oilChanged) { %><span class="badge-success">換油</span><% } %>
+              <% if (r.batteryChanged) { %><span class="badge">換電</span><% } %>
+              <svg class="text-flow-muted ml-1" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+            </div>
+          </div>
+          <% if (r.actions) { %>
+            <div class="text-sm mt-2"><span class="text-flow-muted">動作：</span><%= r.actions %></div>
+          <% } %>
+          <% if (r.notes) { %>
+            <div class="text-sm mt-1.5 text-flow-muted border-t border-flow-line pt-2"><%= r.notes %></div>
+          <% } %>
+          <% if (r.performedBy) { %>
+            <div class="text-xs text-flow-muted mt-1.5">記錄人：<%= r.performedBy %></div>
+          <% } %>
+        </a>
+      <% }); %>
+    </div>
+  <% } %>
+</div>
+
+<%- include('../partials/foot') %>

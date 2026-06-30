@@ -1,0 +1,56 @@
+<%- include('partials/head') %>
+
+<div class="grid grid-cols-2 gap-2">
+  <div class="stat-card">
+    <div class="stat-label">地點</div>
+    <div class="stat-value"><%= stats.locationCount %></div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">精油機</div>
+    <div class="stat-value"><%= stats.diffuserCount %></div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">逾期換油</div>
+    <div class="stat-value <%= stats.overdueOil > 0 ? 'text-red-500' : '' %>"><%= stats.overdueOil %></div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">逾期換電</div>
+    <div class="stat-value <%= stats.overdueBattery > 0 ? 'text-red-500' : '' %>"><%= stats.overdueBattery %></div>
+  </div>
+</div>
+
+<% if (stats.dueSoon > 0) { %>
+<div class="px-3 py-2.5 rounded-card border border-amber-200 bg-amber-50 text-amber-800 text-sm">
+  有 <strong><%= stats.dueSoon %></strong> 部機器將於 14 日內需要換油或換電
+</div>
+<% } %>
+
+<div class="panel">
+  <div class="flex items-center justify-between mb-3">
+    <h2 class="text-sm font-medium text-flow-muted">即將換油 / 換電</h2>
+    <a href="/diffusers" class="text-xs text-flow-accent">全部精油機 →</a>
+  </div>
+  <% if (dueGroups.length === 0) { %>
+    <p class="text-sm text-flow-muted text-center py-6">14 日內無需換油或換電的機器。</p>
+  <% } else { %>
+    <div class="space-y-4">
+      <% dueGroups.forEach(function(group) { %>
+        <div>
+          <h3 class="text-xs font-medium text-flow-muted mb-2"><%= group.location.name %></h3>
+          <div class="space-y-2">
+            <% group.items.forEach(function(item) { %>
+              <%- include('partials/due-diffuser-item', { item, formatDate }) %>
+            <% }); %>
+          </div>
+        </div>
+      <% }); %>
+    </div>
+  <% } %>
+</div>
+
+<div class="flex gap-2">
+  <a href="/locations/new" class="btn-secondary flex-1">新增地點</a>
+  <a href="/diffusers/new" class="btn-primary flex-1">新增精油機</a>
+</div>
+
+<%- include('partials/foot') %>

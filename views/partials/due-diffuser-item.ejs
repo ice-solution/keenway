@@ -1,0 +1,16 @@
+<% const cardClass = item.urgency === 'red' ? 'row-card-urgent-red' : item.urgency === 'yellow' ? 'row-card-urgent-yellow' : 'row-card'; %>
+<a href="/diffusers/<%= item.diffuser._id %>" class="<%= cardClass %>">
+  <div class="min-w-0 pr-2">
+    <div class="text-sm font-medium truncate"><%= item.diffuser.position %></div>
+    <div class="flex flex-wrap gap-1 mt-1.5">
+      <% item.alerts.forEach(function(alert) { %>
+        <span class="<%= alert.level === 'red' ? 'badge-danger' : 'badge-warn' %>">
+          <%= alert.label %>
+          <% if (alert.days < 0) { %>已逾期<% } else { %><%= alert.days %> 日內<% } %>
+          · <%= formatDate(alert.date) %>
+        </span>
+      <% }); %>
+    </div>
+  </div>
+  <svg class="shrink-0 text-flow-muted" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+</a>

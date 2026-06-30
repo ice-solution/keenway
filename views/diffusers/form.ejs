@@ -1,0 +1,34 @@
+<%- include('../partials/head', { backUrl: diffuser && diffuser._id ? `/diffusers/${diffuser._id}` : (location ? `/locations/${location._id}` : '/locations') }) %>
+
+<div class="panel">
+  <% if (error) { %>
+    <div class="mb-4 px-3 py-2 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm"><%= error %></div>
+  <% } %>
+  <form action="<%= diffuser && diffuser._id ? `/diffusers/${diffuser._id}?_method=PUT` : '/diffusers' %>" method="POST" class="space-y-4">
+    <div>
+      <label class="form-label" for="location">所屬地點 *</label>
+      <select class="form-input" id="location" name="location" required>
+        <option value="">請選擇地點</option>
+        <% locations.forEach(function(loc) { %>
+          <% const selected = (location && String(location._id) === String(loc._id)) || (diffuser && String(diffuser.location) === String(loc._id)); %>
+          <option value="<%= loc._id %>" <%= selected ? 'selected' : '' %>><%= loc.name %></option>
+        <% }); %>
+      </select>
+    </div>
+    <div>
+      <label class="form-label" for="position">精油機位置 *</label>
+      <input class="form-input" type="text" id="position" name="position" value="<%= diffuser ? diffuser.position : '' %>" required placeholder="例如：大堂左側、會議室 A" />
+    </div>
+    <div>
+      <label class="form-label" for="oilType">使用精油</label>
+      <input class="form-input" type="text" id="oilType" name="oilType" value="<%= diffuser ? diffuser.oilType : '' %>" placeholder="例如：薰衣草、柑橘混合" />
+    </div>
+    <div>
+      <label class="form-label" for="parts">使用的機件</label>
+      <input class="form-input" type="text" id="parts" name="parts" value="<%= diffuser ? diffuser.parts : '' %>" placeholder="例如：霧化芯、泵頭、電池型號" />
+    </div>
+    <button type="submit" class="btn-primary w-full"><%= diffuser && diffuser._id ? '儲存變更' : '建立精油機' %></button>
+  </form>
+</div>
+
+<%- include('../partials/foot') %>

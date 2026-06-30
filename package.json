@@ -1,0 +1,26 @@
+{
+  "name": "keenway-diffuser-mgmt",
+  "version": "1.0.0",
+  "description": "香芬公司精油機換油換電管理系統",
+  "main": "server.js",
+  "scripts": {
+    "dev": "concurrently \"npm run css:watch\" \"nodemon server.js\"",
+    "start": "node server.js",
+    "css:build": "tailwindcss -i ./src/input.css -o ./public/css/style.css --minify",
+    "css:watch": "tailwindcss -i ./src/input.css -o ./public/css/style.css --watch"
+  },
+  "dependencies": {
+    "connect-mongo": "^5.1.0",
+    "dotenv": "^16.4.7",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "express-session": "^1.18.1",
+    "method-override": "^3.0.0",
+    "mongoose": "^8.9.3"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "nodemon": "^3.1.9",
+    "tailwindcss": "^3.4.17"
+  }
+}

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title><%= title %> · Keenway</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body class="pb-20">
+  <div class="shell">
+    <% if (typeof showNav === 'undefined' || showNav) { %>
+      <header class="top-bar">
+        <div class="flex items-center gap-2 min-w-0">
+          <% if (typeof backUrl !== 'undefined' && backUrl) { %>
+            <a href="<%= backUrl %>" class="text-flow-muted hover:text-flow-text shrink-0" aria-label="返回">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+            </a>
+          <% } %>
+          <span class="font-semibold text-sm truncate"><%= title %></span>
+        </div>
+        <% if (user) { %>
+          <form action="/logout" method="POST" class="shrink-0">
+            <button type="submit" class="text-xs text-flow-muted hover:text-flow-text">登出</button>
+          </form>
+        <% } %>
+      </header>
+    <% } %>
+
+    <main class="p-4 space-y-4">

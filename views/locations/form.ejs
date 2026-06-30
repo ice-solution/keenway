@@ -1,0 +1,28 @@
+<%- include('../partials/head', { backUrl: location && location._id ? `/locations/${location._id}` : '/locations' }) %>
+
+<div class="panel">
+  <% if (error) { %>
+    <div class="mb-4 px-3 py-2 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm"><%= error %></div>
+  <% } %>
+  <form action="<%= location && location._id ? `/locations/${location._id}?_method=PUT` : '/locations' %>" method="POST" class="space-y-4">
+    <div>
+      <label class="form-label" for="name">地點名稱 *</label>
+      <input class="form-input" type="text" id="name" name="name" value="<%= location ? location.name : '' %>" required placeholder="例如：中環辦公室" />
+    </div>
+    <div>
+      <label class="form-label" for="address">地址</label>
+      <input class="form-input" type="text" id="address" name="address" value="<%= location ? location.address : '' %>" placeholder="選填" />
+    </div>
+    <div>
+      <label class="form-label" for="contact">聯絡人</label>
+      <input class="form-input" type="text" id="contact" name="contact" value="<%= location ? location.contact : '' %>" placeholder="選填" />
+    </div>
+    <div>
+      <label class="form-label" for="notes">備註</label>
+      <textarea class="form-textarea" id="notes" name="notes" placeholder="地點相關備註"><%= location ? location.notes : '' %></textarea>
+    </div>
+    <button type="submit" class="btn-primary w-full"><%= location && location._id ? '儲存變更' : '建立地點' %></button>
+  </form>
+</div>
+
+<%- include('../partials/foot') %>

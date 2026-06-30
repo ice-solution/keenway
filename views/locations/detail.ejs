@@ -1,0 +1,57 @@
+<%- include('../partials/head', { backUrl: '/locations' }) %>
+
+<div class="panel space-y-2">
+  <% if (location.address) { %>
+    <div class="text-sm"><span class="text-flow-muted">地址：</span><%= location.address %></div>
+  <% } %>
+  <% if (location.contact) { %>
+    <div class="text-sm"><span class="text-flow-muted">聯絡人：</span><%= location.contact %></div>
+  <% } %>
+  <% if (location.notes) { %>
+    <div class="text-sm"><span class="text-flow-muted">備註：</span><%= location.notes %></div>
+  <% } %>
+  <div class="flex gap-2 pt-2">
+    <a href="/locations/<%= location._id %>/edit" class="btn-secondary flex-1 text-center">編輯地點</a>
+    <a href="/diffusers/new?location=<%= location._id %>" class="btn-primary flex-1 text-center">+ 精油機</a>
+  </div>
+</div>
+
+<div>
+  <h2 class="text-sm font-medium text-flow-muted mb-2">精油機（<%= diffusers.length %>）</h2>
+  <% if (diffusers.length === 0) { %>
+    <div class="panel text-center py-8 text-flow-muted text-sm">此地點尚無精油機</div>
+  <% } else { %>
+    <div class="space-y-2">
+      <% diffusers.forEach(function(d) { %>
+        <% const last = lastRecordMap[d._id.toString()]; %>
+        <div class="flex border border-flow-line rounded-card bg-flow-panel overflow-hidden">
+          <a href="/diffusers/<%= d._id %>" class="flex flex-1 min-w-0 items-center justify-between p-3 hover:bg-flow-hover transition-colors no-underline text-inherit">
+            <div class="min-w-0 pr-2">
+              <div class="font-medium truncate"><%= d.position %></div>
+              <div class="text-xs text-flow-muted mt-0.5 truncate"><%= d.oilType || '未設定精油' %> · <%= d.parts || '未設定機件' %></div>
+              <% if (last) { %>
+                <div class="text-xs text-flow-muted mt-1.5 truncate">
+                  最後更新：<%= formatDate(last.performedAt) %>
+                  <% if (last.actions) { %> · <%= last.actions %><% } %>
+                </div>
+                <div class="flex flex-wrap gap-1 mt-1">
+                  <% if (last.oilChanged) { %><span class="badge-success">換油</span><% } %>
+                  <% if (last.batteryChanged) { %><span class="badge">換電</span><% } %>
+                  <% if (last.performedBy) { %><span class="badge"><%= last.performedBy %></span><% } %>
+                </div>
+              <% } else { %>
+                <div class="text-xs text-flow-muted mt-1.5">尚無工作記錄</div>
+              <% } %>
+            </div>
+            <svg class="shrink-0 text-flow-muted" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+          </a>
+          <a href="/records/new?diffuser=<%= d._id %>" class="flex items-center justify-center w-12 shrink-0 border-l border-flow-line hover:bg-flow-hover text-flow-accent transition-colors no-underline" aria-label="新增工作記錄" title="新增工作記錄">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+          </a>
+        </div>
+      <% }); %>
+    </div>
+  <% } %>
+</div>
+
+<%- include('../partials/foot') %>

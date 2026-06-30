@@ -1,0 +1,28 @@
+<%- include('partials/head') %>
+
+<div class="min-h-[80vh] flex flex-col justify-center px-2">
+  <div class="text-center mb-8">
+    <img src="/images/logo.png" alt="Keenway" class="h-16 w-auto mx-auto mb-4 object-contain" />
+    <h1 class="text-2xl font-semibold tracking-tight">Keenway 管理系統</h1>
+    <p class="text-flow-muted text-sm mt-2">精油機換油換電管理平台</p>
+  </div>
+
+  <div class="panel max-w-sm mx-auto w-full">
+    <% if (error) { %>
+      <div class="mb-4 px-3 py-2 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm"><%= error %></div>
+    <% } %>
+    <form action="/login" method="POST" class="space-y-4">
+      <div>
+        <label class="form-label" for="username">用戶名</label>
+        <input class="form-input" type="text" id="username" name="username" required autocomplete="username" />
+      </div>
+      <div>
+        <label class="form-label" for="password">密碼</label>
+        <input class="form-input" type="password" id="password" name="password" required autocomplete="current-password" />
+      </div>
+      <button type="submit" class="btn-primary w-full">登入</button>
+    </form>
+  </div>
+</div>
+
+<%- include('partials/foot', { showNav: false }) %>

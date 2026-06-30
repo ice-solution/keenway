@@ -1,0 +1,31 @@
+<%- include('../partials/head') %>
+
+<div class="flex items-center justify-between">
+  <p class="text-sm text-flow-muted">共 <%= locations.length %> 個地點</p>
+  <a href="/locations/new" class="btn-primary text-xs px-3 py-2">+ 新增</a>
+</div>
+
+<% if (locations.length === 0) { %>
+  <div class="panel text-center py-10">
+    <p class="text-flow-muted text-sm mb-4">尚未建立任何地點</p>
+    <a href="/locations/new" class="btn-primary">新增第一個地點</a>
+  </div>
+<% } else { %>
+  <div class="space-y-2">
+    <% locations.forEach(function(loc) { %>
+      <a href="/locations/<%= loc._id %>" class="row-card">
+        <div class="min-w-0">
+          <div class="font-medium truncate"><%= loc.name %></div>
+          <% if (loc.address) { %>
+            <div class="text-xs text-flow-muted truncate mt-0.5"><%= loc.address %></div>
+          <% } %>
+        </div>
+        <div class="shrink-0 ml-3 text-right">
+          <span class="badge"><%= countMap[loc._id.toString()] || 0 %> 部機</span>
+        </div>
+      </a>
+    <% }); %>
+  </div>
+<% } %>
+
+<%- include('../partials/foot') %>

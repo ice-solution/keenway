@@ -1,0 +1,14 @@
+<nav class="nav-bottom" aria-label="主選單">
+  <a href="/dashboard" class="nav-item <%= currentPath.startsWith('/dashboard') ? 'active' : '' %>">
+    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+    總覽
+  </a>
+  <a href="/locations" class="nav-item <%= currentPath.startsWith('/locations') ? 'active' : '' %>">
+    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 21s-7-4.5-7-10a7 7 0 1114 0c0 5.5-7 10-7 10z"/><circle cx="12" cy="11" r="2.5"/></svg>
+    地點
+  </a>
+  <a href="/diffusers" class="nav-item <%= currentPath.startsWith('/diffusers') ? 'active' : '' %>">
+    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+    精油機
+  </a>
+</nav>

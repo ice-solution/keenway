@@ -1,0 +1,50 @@
+<%- include('../partials/head') %>
+
+<div class="flex items-center justify-between">
+  <p class="text-sm text-flow-muted">按地點排列</p>
+  <a href="/diffusers/new" class="btn-primary text-xs px-3 py-2">+ 新增</a>
+</div>
+
+<% if (groups.length === 0) { %>
+  <div class="panel text-center py-10">
+    <p class="text-flow-muted text-sm mb-4">尚未建立任何精油機</p>
+    <a href="/diffusers/new" class="btn-primary">新增精油機</a>
+  </div>
+<% } else { %>
+  <div class="space-y-4">
+    <% groups.forEach(function(group) { %>
+      <div>
+        <h2 class="text-sm font-medium text-flow-muted mb-2">
+          <a href="/locations/<%= group.location._id %>" class="hover:text-flow-text"><%= group.location.name %></a>
+          （<%= group.items.length %>）
+        </h2>
+        <div class="space-y-2">
+          <% group.items.forEach(function(item) { %>
+            <% const cardClass = item.urgency === 'red' ? 'row-card-urgent-red' : item.urgency === 'yellow' ? 'row-card-urgent-yellow' : 'row-card'; %>
+            <a href="/diffusers/<%= item.diffuser._id %>" class="<%= cardClass %>">
+              <div class="min-w-0 pr-2">
+                <div class="font-medium truncate"><%= item.diffuser.position %></div>
+                <div class="text-xs text-flow-muted mt-0.5 truncate">
+                  <%= item.diffuser.oilType || '未設定精油' %> · <%= item.diffuser.parts || '未設定機件' %>
+                </div>
+                <% if (item.alerts.length) { %>
+                  <div class="flex flex-wrap gap-1 mt-1.5">
+                    <% item.alerts.forEach(function(alert) { %>
+                      <span class="<%= alert.level === 'red' ? 'badge-danger' : 'badge-warn' %>">
+                        <%= alert.label %>
+                        <% if (alert.days < 0) { %>已逾期<% } else { %><%= alert.days %> 日內<% } %>
+                      </span>
+                    <% }); %>
+                  </div>
+                <% } %>
+              </div>
+              <svg class="shrink-0 text-flow-muted" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+            </a>
+          <% }); %>
+        </div>
+      </div>
+    <% }); %>
+  </div>
+<% } %>
+
+<%- include('../partials/foot') %>
