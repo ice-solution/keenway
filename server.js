@@ -9,6 +9,11 @@ const { requireAuth } = require('./middleware/auth');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const isProduction = process.env.NODE_ENV === 'production';
+
+if (isProduction) {
+  app.set('trust proxy', 1);
+}
 
 connectDB();
 
@@ -25,13 +30,16 @@ app.use(
     secret: process.env.SESSION_SECRET || 'keenway-secret',
     resave: false,
     saveUninitialized: false,
+    proxy: isProduction,
     store: MongoStore.create({
       mongoUrl: process.env.MONGODB_URI,
       ttl: 60 * 60 * 24 * 7,
     }),
     cookie: {
       maxAge: 1000 * 60 * 60 * 24 * 7,
-      secure: process.env.NODE_ENV === 'production',
+      httpOnly: true,
+      sameSite: 'lax',
+      secure: isProduction,
     },
   })
 );

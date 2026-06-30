@@ -18,7 +18,13 @@ router.post('/login', (req, res) => {
 
   if (validUser && validPass) {
     req.session.user = { username };
-    return res.redirect('/dashboard');
+    return req.session.save((err) => {
+      if (err) {
+        console.error('Session save error:', err);
+        return res.render('login', { title: '登入', error: '登入失敗，請稍後再試' });
+      }
+      res.redirect('/dashboard');
+    });
   }
 
   res.render('login', { title: '登入', error: '用戶名或密碼不正確' });
