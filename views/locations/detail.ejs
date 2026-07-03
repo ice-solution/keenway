@@ -24,7 +24,8 @@
     <div class="space-y-2">
       <% diffusers.forEach(function(d) { %>
         <% const last = lastRecordMap[d._id.toString()]; %>
-        <div class="flex border border-flow-line rounded-card bg-flow-panel overflow-hidden">
+        <% const hasNotes = last && last.notes && String(last.notes).trim(); %>
+        <div class="flex overflow-hidden rounded-card <%= hasNotes ? 'border border-orange-400 bg-orange-50/60' : 'border border-flow-line bg-flow-panel' %>">
           <a href="/diffusers/<%= d._id %>" class="flex flex-1 min-w-0 items-center justify-between p-3 hover:bg-flow-hover transition-colors no-underline text-inherit">
             <div class="min-w-0 pr-2">
               <div class="font-medium truncate"><%= d.position %></div>
@@ -34,6 +35,9 @@
                   最後更新：<%= formatDate(last.performedAt) %>
                   <% if (last.actions) { %> · <%= last.actions %><% } %>
                 </div>
+                <% if (hasNotes) { %>
+                  <div class="text-xs text-orange-700 mt-1 truncate">備註：<%= last.notes %></div>
+                <% } %>
                 <div class="flex flex-wrap gap-1 mt-1">
                   <% if (last.oilChanged) { %><span class="badge-success">換油</span><% } %>
                   <% if (last.batteryChanged) { %><span class="badge">換電</span><% } %>

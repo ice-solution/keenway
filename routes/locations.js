@@ -15,10 +15,27 @@ router.get('/', async (req, res) => {
     ]);
     const countMap = Object.fromEntries(counts.map((c) => [c._id.toString(), c.count]));
 
+    const recordNotesAtLocation = await WorkRecord.aggregate([
+      { $sort: { performedAt: -1 } },
+      {
+        $group: {
+          _id: '$diffuser',
+          location: { $first: '$location' },
+          notes: { $first: '$notes' },
+        },
+      },
+      { $match: { notes: { $nin: [null, ''] } } },
+      { $group: { _id: '$location' } },
+    ]);
+    const recordNotesMap = Object.fromEntries(
+      recordNotesAtLocation.map((r) => [r._id.toString(), true])
+    );
+
     res.render('locations/list', {
       title: '地點管理',
       locations,
       countMap,
+      recordNotesMap,
     });
   } catch (err) {
     console.error(err);
@@ -65,6 +82,7 @@ router.get('/:id', async (req, res) => {
               _id: '$diffuser',
               performedAt: { $first: '$performedAt' },
               actions: { $first: '$actions' },
+              notes: { $first: '$notes' },
               oilChanged: { $first: '$oilChanged' },
               batteryChanged: { $first: '$batteryChanged' },
               performedBy: { $first: '$performedBy' },

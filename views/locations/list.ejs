@@ -13,7 +13,7 @@
 <% } else { %>
   <div class="space-y-2">
     <% locations.forEach(function(loc) { %>
-      <% const hasNotes = !!(loc.notes && String(loc.notes).trim()); %>
+      <% const hasNotes = !!(loc.notes && String(loc.notes).trim()) || recordNotesMap[loc._id.toString()]; %>
       <a href="/locations/<%= loc._id %>" class="<%= hasNotes ? 'row-card-notes' : 'row-card' %>">
         <div class="min-w-0">
           <div class="font-medium truncate"><%= loc.name %></div>
