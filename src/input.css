@@ -105,6 +105,10 @@
     @apply row-card border-red-400 bg-red-50/60;
   }
 
+  .row-card-notes {
+    @apply row-card border-orange-400 bg-orange-50/60;
+  }
+
   .table-wrap {
     @apply overflow-x-auto -mx-1;
   }
