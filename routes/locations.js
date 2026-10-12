@@ -2,7 +2,7 @@ const express = require('express');
 const Location = require('../models/Location');
 const Diffuser = require('../models/Diffuser');
 const WorkRecord = require('../models/WorkRecord');
-const { formatDate } = require('../utils/dates');
+const { formatDate, isSameLocalDay } = require('../utils/dates');
 
 const router = express.Router();
 
@@ -92,7 +92,14 @@ router.get('/:id', async (req, res) => {
       : [];
     const lastRecordMap = Object.fromEntries(latestRecords.map((r) => [r._id.toString(), r]));
 
-    res.render('locations/detail', { title: location.name, location, diffusers, lastRecordMap, formatDate });
+    res.render('locations/detail', {
+      title: location.name,
+      location,
+      diffusers,
+      lastRecordMap,
+      formatDate,
+      isSameLocalDay,
+    });
   } catch (err) {
     console.error(err);
     res.status(500).render('error', { title: '系統錯誤', message: '無法載入地點詳情。' });

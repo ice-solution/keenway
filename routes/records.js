@@ -17,11 +17,8 @@ function parsePerformedAt(value) {
 
 function formatDateInput(date) {
   if (!date) return '';
-  const d = new Date(date);
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, '0');
-  const day = String(d.getDate()).padStart(2, '0');
-  return `${y}-${m}-${day}`;
+  const { hkDateKey } = require('../utils/dates');
+  return hkDateKey(date);
 }
 
 router.get('/new', async (req, res) => {
@@ -95,7 +92,7 @@ router.post('/', async (req, res) => {
     });
 
     await syncDiffuserSchedule(diffuserId);
-    res.redirect(`/diffusers/${diffuserId}?recorded=1`);
+    res.redirect(`/locations/${locationId}`);
   } catch (err) {
     console.error(err);
     res.status(500).render('error', { title: '系統錯誤', message: '無法儲存工作記錄。' });
@@ -127,7 +124,7 @@ router.put('/:id', async (req, res) => {
     await record.save();
 
     await syncDiffuserSchedule(record.diffuser);
-    res.redirect(`/diffusers/${record.diffuser}?recorded=1`);
+    res.redirect(`/locations/${record.location}`);
   } catch (err) {
     console.error(err);
     res.status(500).render('error', { title: '系統錯誤', message: '無法更新工作記錄。' });

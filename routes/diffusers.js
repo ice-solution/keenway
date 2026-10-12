@@ -2,7 +2,7 @@ const express = require('express');
 const Location = require('../models/Location');
 const Diffuser = require('../models/Diffuser');
 const WorkRecord = require('../models/WorkRecord');
-const { formatDate, dueStatus, groupDiffusersByLocation } = require('../utils/dates');
+const { formatDate, dueStatus, groupDiffusersByLocation, hkDateKey } = require('../utils/dates');
 
 const router = express.Router();
 
@@ -13,11 +13,28 @@ router.get('/', async (req, res) => {
       .sort({ createdAt: 1 });
     const groups = groupDiffusersByLocation(diffusers);
 
+    const diffuserIds = diffusers.map((d) => d._id);
+    const todayKey = hkDateKey();
+    // Pull recent records and filter by Hong Kong calendar day
+    const recentCutoff = new Date(Date.now() - 2 * 24 * 60 * 60 * 1000);
+    const recentRecords = diffuserIds.length
+      ? await WorkRecord.find({
+          diffuser: { $in: diffuserIds },
+          performedAt: { $gte: recentCutoff },
+        }).select('diffuser performedAt')
+      : [];
+    const doneTodayMap = Object.fromEntries(
+      recentRecords
+        .filter((r) => hkDateKey(r.performedAt) === todayKey)
+        .map((r) => [r.diffuser.toString(), true])
+    );
+
     res.render('diffusers/list', {
       title: '精油機',
       groups,
       formatDate,
       dueStatus,
+      doneTodayMap,
     });
   } catch (err) {
     console.error(err);

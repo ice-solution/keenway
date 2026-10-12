@@ -109,6 +109,27 @@
     @apply row-card border-orange-400 bg-orange-50/60;
   }
 
+  .row-card-today,
+  .row-card-done-today {
+    @apply row-card border-emerald-400 bg-emerald-50/60;
+  }
+
+  .machine-card {
+    @apply border border-flow-line bg-flow-panel;
+  }
+
+  .machine-card-notes {
+    @apply border border-orange-400 bg-orange-50/60;
+  }
+
+  .machine-card-today {
+    @apply border border-emerald-400 bg-emerald-50/60;
+  }
+
+  .machine-card-today-label {
+    @apply text-emerald-700;
+  }
+
   .table-wrap {
     @apply overflow-x-auto -mx-1;
   }

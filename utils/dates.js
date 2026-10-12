@@ -13,6 +13,24 @@ function formatDate(date) {
   });
 }
 
+function hkDateKey(date = new Date()) {
+  return new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Asia/Hong_Kong',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(new Date(date));
+}
+
+function isSameLocalDay(a, b = new Date()) {
+  if (!a) return false;
+  return hkDateKey(a) === hkDateKey(b);
+}
+
+function isToday(date) {
+  return isSameLocalDay(date, new Date());
+}
+
 function daysUntil(date) {
   if (!date) return null;
   const due = new Date(date);
@@ -111,6 +129,9 @@ function dueStatus(date) {
 module.exports = {
   addMonths,
   formatDate,
+  hkDateKey,
+  isSameLocalDay,
+  isToday,
   daysUntil,
   dateUrgency,
   machineUrgency,

@@ -20,14 +20,25 @@
         </h2>
         <div class="space-y-2">
           <% group.items.forEach(function(item) { %>
-            <% const cardClass = item.urgency === 'red' ? 'row-card-urgent-red' : item.urgency === 'yellow' ? 'row-card-urgent-yellow' : 'row-card'; %>
+            <% const doneToday = !!(doneTodayMap && doneTodayMap[item.diffuser._id.toString()]); %>
+            <% const cardClass = doneToday
+              ? 'row-card-done-today'
+              : item.urgency === 'red'
+                ? 'row-card-urgent-red'
+                : item.urgency === 'yellow'
+                  ? 'row-card-urgent-yellow'
+                  : 'row-card'; %>
             <a href="/diffusers/<%= item.diffuser._id %>" class="<%= cardClass %>">
               <div class="min-w-0 pr-2">
                 <div class="font-medium truncate"><%= item.diffuser.position %></div>
                 <div class="text-xs text-flow-muted mt-0.5 truncate">
                   <%= item.diffuser.oilType || '未設定精油' %> · <%= item.diffuser.parts || '未設定機件' %>
                 </div>
-                <% if (item.alerts.length) { %>
+                <% if (doneToday) { %>
+                  <div class="flex flex-wrap gap-1 mt-1.5">
+                    <span class="badge-success">今日已做</span>
+                  </div>
+                <% } else if (item.alerts.length) { %>
                   <div class="flex flex-wrap gap-1 mt-1.5">
                     <% item.alerts.forEach(function(alert) { %>
                       <span class="<%= alert.level === 'red' ? 'badge-danger' : 'badge-warn' %>">
